@@ -1,0 +1,63 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android' version '1.8.0'
+    id 'com.google.devtools.ksp' version '1.8.0-1.0.9'
+}
+
+android {
+    namespace 'com.luckyzyx.notificationinterception'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.luckyzyx.notificationinterception"
+        minSdk 29
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    viewBinding {
+        enabled = true
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            if ('release' == variant.buildType.name) {
+                outputFileName = "NI_v${variant.versionName}(${versionCode}).apk"
+            }
+            if ('debug' == variant.buildType.name) {
+                outputFileName = "NI_v${variant.versionName}(${versionCode})_debug.apk"
+            }
+        }
+    }
+}
+
+dependencies {
+    compileOnly "de.robv.android.xposed:api:82"
+    implementation "com.highcapable.yukihookapi:api:1.1.6"
+    ksp "com.highcapable.yukihookapi:ksp-xposed:1.1.6"
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+}
