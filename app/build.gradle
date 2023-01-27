@@ -7,12 +7,12 @@ plugins {
 android {
     namespace 'com.luckyzyx.notificationinterception'
     compileSdk 33
-
+    def currentVersionCode = getVersionCode()
     defaultConfig {
         applicationId "com.luckyzyx.notificationinterception"
         minSdk 29
         targetSdk 33
-        versionCode 1
+        versionCode currentVersionCode
         versionName "1.0"
     }
 
@@ -54,10 +54,24 @@ dependencies {
     compileOnly "de.robv.android.xposed:api:82"
     implementation "com.highcapable.yukihookapi:api:1.1.6"
     ksp "com.highcapable.yukihookapi:ksp-xposed:1.1.6"
+    implementation "com.github.simplepeng.SpiderMan:spiderman:v1.1.9"
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.github.liangjingkanji:Net:3.5.2'
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+}
+
+def getVersionCode() {
+    def propsFile = file('version.properties')
+    def properties = new Properties()
+    properties.load(new FileInputStream(propsFile))
+    def vCode = properties['versionCode'].toInteger()
+    properties['versionCode'] = (++vCode).toString()
+    properties.store(propsFile.newWriter(), null)
+    return vCode
 }
