@@ -11,12 +11,19 @@
         android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/main_tv"
-            android:gravity="center"
+            android:id="@+id/active_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/main_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:gravity="center" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/main_btn"

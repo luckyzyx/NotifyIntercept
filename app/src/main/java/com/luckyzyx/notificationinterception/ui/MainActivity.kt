@@ -3,7 +3,9 @@ package com.luckyzyx.notificationinterception.ui
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
+import com.highcapable.yukihookapi.YukiHookAPI
 import com.luckyzyx.notificationinterception.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +21,18 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initSkip() {
+        val xposedActive = YukiHookAPI.Status.isXposedModuleActive
+        val taichiActive = YukiHookAPI.Status.isTaiChiModuleActive
+        val moduleActive = YukiHookAPI.Status.isModuleActive
+        binding.activeStatus.apply {
+            text = """
+                Xposed: $xposedActive
+                太极/无极: $taichiActive
+                激活状态: $moduleActive
+                YukiAPI: ${YukiHookAPI.API_VERSION_NAME}[${YukiHookAPI.API_VERSION_CODE}]
+            """.trimIndent()
+            gravity = Gravity.CENTER
+        }
         binding.mainTv.apply {
             text = """
                 通知拦截初版Demo,开发者: 忆清鸣、luckyzyx
@@ -27,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.mainBtn.apply {
             text = "配置作用域"
+            isEnabled = moduleActive
             setOnClickListener {
                 startActivity(Intent(context, AppListActivity::class.java))
             }
