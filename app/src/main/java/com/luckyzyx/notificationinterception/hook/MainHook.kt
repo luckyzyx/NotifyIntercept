@@ -28,9 +28,11 @@ class MainHook : IYukiHookXposedInit {
     }
 }
 
-@Suppress("DEPRECATION")
+@Suppress("UNUSED_VARIABLE", "DEPRECATION")
 class Hooker : YukiBaseHooker() {
     override fun onHook() {
+        val enableList = prefs.getStringSet("enabledAppList", ArraySet())
+        if (!enableList.contains(packageName)) return
         val titleData = prefs.getStringSet(packageName + "_title", ArraySet())
         val textData = prefs.getStringSet(packageName + "_text", ArraySet())
         if (titleData.isEmpty() && textData.isEmpty()) return
@@ -42,14 +44,14 @@ class Hooker : YukiBaseHooker() {
                     paramCount = 3
                 }
                 beforeHook {
-                    val tag = args(0).cast<String>() ?: "null"
+                    val tag = args(0).string()
                     val id = args(1).int()
                     val notify = args(2).cast<Notification>()
                     val bundle = notify?.extras
-                    val title = bundle?.get("android.title")
-                    val text = bundle?.get("android.text")
-                    if (titleData.contains(title)) resultNull()
-                    if (textData.contains(text)) resultNull()
+                    val title = bundle?.get("android.title").toString()
+                    val text = bundle?.get("android.text").toString()
+                    titleData.takeIf { e -> e.isNotEmpty() }?.forEach { if (title.contains(it)) resultNull() }
+                    textData.takeIf { e -> e.isNotEmpty() }?.forEach { if (text.contains(it)) resultNull() }
                 }
             }
         }

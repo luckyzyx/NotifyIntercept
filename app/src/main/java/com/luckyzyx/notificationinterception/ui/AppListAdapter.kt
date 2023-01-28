@@ -118,7 +118,7 @@ class AppListAdapter(private val context: Context, datas: ArrayList<AppInfo>) :
         if (isEnable) holder.appInfoView.setCardBackgroundColor(Color.parseColor("#D4E4E4"))
         holder.appInfoView.setOnClickListener {
             val intent = Intent(context, AppConfigActivity::class.java)
-            intent.putExtra("packName",filterDatas[position].packName)
+            intent.putExtra("packName", filterDatas[position].packName)
             context.startActivity(intent)
         }
     }
