@@ -22,5 +22,5 @@ dependencyResolutionManagement {
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
     }
 }
-rootProject.name = "NotificationInterception"
+rootProject.name = "NotifyIntercept"
 include ':app'

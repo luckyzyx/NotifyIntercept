@@ -7,25 +7,25 @@
     tools:context=".ui.AppListActivity">
 
     <LinearLayout
-        android:id="@+id/linear_layout"
+        android:id="@+id/app_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingHorizontal="8dp"
         android:layout_marginVertical="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/swipe_refresh_layout"
+        app:layout_constraintBottom_toTopOf="@+id/app_swipe_refresh_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/search_view_layout"
+            android:id="@+id/app_search_view_layout"
             app:startIconDrawable="@drawable/baseline_search_24"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/search_view"
+                android:id="@+id/app_search_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -34,16 +34,16 @@
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+        android:id="@+id/app_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout">
+        app:layout_constraintTop_toBottomOf="@+id/app_linear_layout">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/app_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp" />
 

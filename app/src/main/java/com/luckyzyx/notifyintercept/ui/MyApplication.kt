@@ -1,4 +1,4 @@
-package com.luckyzyx.notificationinterception.ui
+package com.luckyzyx.notifyintercept.ui
 
 import com.highcapable.yukihookapi.hook.xposed.application.ModuleApplication
 

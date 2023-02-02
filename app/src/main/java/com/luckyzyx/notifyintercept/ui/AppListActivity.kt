@@ -1,4 +1,4 @@
-package com.luckyzyx.notificationinterception.ui
+package com.luckyzyx.notifyintercept.ui
 
 import android.content.pm.ApplicationInfo
 import android.content.res.ColorStateList
@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.drake.net.utils.scopeLife
 import com.drake.net.utils.withIO
 import com.highcapable.yukihookapi.hook.factory.modulePrefs
-import com.luckyzyx.notificationinterception.R
-import com.luckyzyx.notificationinterception.databinding.ActivityAppListBinding
-import com.luckyzyx.notificationinterception.utlis.PackageUtils
+import com.luckyzyx.notifyintercept.R
+import com.luckyzyx.notifyintercept.databinding.ActivityAppListBinding
+import com.luckyzyx.notifyintercept.utlis.PackageUtils
 
 class AppListActivity : AppCompatActivity() {
 
@@ -30,18 +30,18 @@ class AppListActivity : AppCompatActivity() {
         binding = ActivityAppListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "作用域"
+        supportActionBar?.title = getString(R.string.app_list_title)
         initView()
     }
 
     private fun initView() {
         isShowSystemApp = modulePrefs.getBoolean("show_system_app", false)
-        binding.searchViewLayout.apply {
+        binding.appSearchViewLayout.apply {
             hint = "Name / PackageName"
             isHintEnabled = true
             isHintAnimationEnabled = true
         }
-        binding.searchView.apply {
+        binding.appSearchView.apply {
             addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?,
@@ -58,7 +58,7 @@ class AppListActivity : AppCompatActivity() {
                 override fun afterTextChanged(s: Editable?) {}
             })
         }
-        binding.swipeRefreshLayout.apply {
+        binding.appSwipeRefreshLayout.apply {
             setOnRefreshListener {
                 loadData()
             }
@@ -67,9 +67,9 @@ class AppListActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        binding.swipeRefreshLayout.isRefreshing = true
-        binding.searchViewLayout.isEnabled = false
-        binding.searchView.text = null
+        binding.appSwipeRefreshLayout.isRefreshing = true
+        binding.appSearchViewLayout.isEnabled = false
+        binding.appSearchView.text = null
         appListAllDatas.clear()
         scopeLife {
             withIO {
@@ -87,12 +87,12 @@ class AppListActivity : AppCompatActivity() {
                 }
             }
             appListAdapter = AppListAdapter(this@AppListActivity, appListAllDatas)
-            binding.recyclerView.apply {
+            binding.appRecyclerView.apply {
                 adapter = appListAdapter
                 layoutManager = LinearLayoutManager(this@AppListActivity)
             }
-            binding.swipeRefreshLayout.isRefreshing = false
-            binding.searchViewLayout.isEnabled = true
+            binding.appSwipeRefreshLayout.isRefreshing = false
+            binding.appSearchViewLayout.isEnabled = true
         }
     }
 

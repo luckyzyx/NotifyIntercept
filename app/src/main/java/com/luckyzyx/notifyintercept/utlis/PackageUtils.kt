@@ -1,6 +1,6 @@
 @file:Suppress("PrivatePropertyName", "unused", "DEPRECATION")
 
-package com.luckyzyx.notificationinterception.utlis
+package com.luckyzyx.notifyintercept.utlis
 
 import android.annotation.SuppressLint
 import android.content.Intent

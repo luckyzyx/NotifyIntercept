@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">通知拦截</string>
+    <string name="app_name" translatable="false">NotifyIntercept</string>
+    <string name="xposeddescription">Use keyword matching to intercept notifications\nDeveloper: 忆清鸣、luckyzyx</string>
+    <string name="configuration_scope">Configuration Scope</string>
+    <string name="app_list_title">Scope</string>
+    <string name="module_active_status">Active State</string>
+    <string name="taichi_active_status">TaiChi</string>
+    <string name="module_ban_tips">Developer: 忆清鸣、luckyzyx\nUnauthorized handling and reprinting are prohibited without the authorization of the developer</string>
+    <string name="ni_enable_intercept">Enable Intercept</string>
+    <string name="ni_add_notify">Add Notify</string>
+    <string name="ni_data_tips_1">Intercept according to the comparison between the input characters and the notification, when the notification contains this keyword or sentence, it will be intercepted\n\n</string>
+    <string name="ni_data_tips_2">Shorter characters may block other notifications, so be sure to enter correct text or sentences\n\n</string>
+    <string name="ni_data_tips_3">Note: After switching the system language, you must reset the blocking keyword, otherwise it may be invalid</string>
+    <string name="ni_title">Title</string>
+    <string name="ni_content">Content</string>
+    <string name="ni_edit_notify">Edit Notify</string>
+    <string name="dialog_remove_tips">Are you sure you want to remove this notification?</string>
 </resources>

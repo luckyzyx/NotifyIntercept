@@ -1,4 +1,4 @@
-package com.luckyzyx.notificationinterception.ui
+package com.luckyzyx.notifyintercept.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,7 +14,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.highcapable.yukihookapi.hook.factory.modulePrefs
-import com.luckyzyx.notificationinterception.databinding.LayoutAppinfoItemBinding
+import com.luckyzyx.notifyintercept.databinding.LayoutAppinfoItemBinding
 import java.io.Serializable
 
 data class AppInfo(
@@ -40,8 +40,8 @@ class AppListAdapter(private val context: Context, datas: ArrayList<AppInfo>) :
     private fun sortDatas() {
         val getEnabledList = context.modulePrefs.getStringSet("enabledAppList", ArraySet())
         if (getEnabledList.isNotEmpty()) {
-            for (i in getEnabledList) {
-                enabledList.add(i)
+            getEnabledList.forEach {
+                enabledList.add(it)
             }
         }
         allDatas.forEach { its ->
@@ -100,19 +100,24 @@ class AppListAdapter(private val context: Context, datas: ArrayList<AppInfo>) :
                 return filterResults
             }
 
-            @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence, results: FilterResults?) {
                 @Suppress("UNCHECKED_CAST")
                 filterDatas = results?.values as ArrayList<AppInfo>
-                notifyDataSetChanged()
+                refreshDatas()
             }
         }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun refreshDatas() {
+        notifyDataSetChanged()
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.appIcon.setImageDrawable(filterDatas[position].appIcon)
         holder.appName.text = filterDatas[position].appName
         holder.packName.text = filterDatas[position].packName
         holder.appInfoView.setOnClickListener(null)
+        holder.appInfoView.setCardBackgroundColor(Color.WHITE)
 
         val isEnable = enabledList.contains(filterDatas[position].packName)
         if (isEnable) holder.appInfoView.setCardBackgroundColor(Color.parseColor("#D4E4E4"))
@@ -122,5 +127,4 @@ class AppListAdapter(private val context: Context, datas: ArrayList<AppInfo>) :
             context.startActivity(intent)
         }
     }
-
 }

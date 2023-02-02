@@ -1,4 +1,4 @@
-package com.luckyzyx.notificationinterception.ui
+package com.luckyzyx.notifyintercept.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import com.highcapable.yukihookapi.YukiHookAPI
-import com.luckyzyx.notificationinterception.databinding.ActivityMainBinding
+import com.luckyzyx.notifyintercept.R
+import com.luckyzyx.notifyintercept.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = "通知拦截"
+        supportActionBar?.title = getString(R.string.app_name)
 
         initSkip()
     }
@@ -27,25 +28,25 @@ class MainActivity : AppCompatActivity() {
         binding.activeStatus.apply {
             text = """
                 Xposed: $xposedActive
-                太极/无极: $taichiActive
-                激活状态: $moduleActive
+                ${getString(R.string.taichi_active_status)}: $taichiActive
+                ${getString(R.string.module_active_status)}: $moduleActive
                 YukiAPI: ${YukiHookAPI.API_VERSION_NAME}[${YukiHookAPI.API_VERSION_CODE}]
             """.trimIndent()
             gravity = Gravity.CENTER
         }
         binding.mainTv.apply {
-            text = """
-                通知拦截初版Demo,开发者: 忆清鸣、luckyzyx
-                未发布前仅用于测试,未经允许禁止私自分享搬运转发
-            """.trimIndent()
+            text = getString(R.string.module_ban_tips)
         }
         binding.mainBtn.apply {
-            text = "配置作用域"
+            text = getString(R.string.configuration_scope)
             isEnabled = moduleActive
             setOnClickListener {
                 startActivity(Intent(context, AppListActivity::class.java))
             }
         }
-    }
 
+//        val intent = Intent(this@MainActivity, AppConfigActivity::class.java)
+//        intent.putExtra("packName","com.czy0729.bangumi")
+//        startActivity(intent)
+    }
 }

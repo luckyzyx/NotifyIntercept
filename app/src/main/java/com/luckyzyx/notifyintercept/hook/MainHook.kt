@@ -1,4 +1,4 @@
-package com.luckyzyx.notificationinterception.hook
+package com.luckyzyx.notifyintercept.hook
 
 import android.app.Notification
 import android.app.NotificationManager
@@ -33,9 +33,8 @@ class Hooker : YukiBaseHooker() {
     override fun onHook() {
         val enableList = prefs.getStringSet("enabledAppList", ArraySet())
         if (!enableList.contains(packageName)) return
-        val titleData = prefs.getStringSet(packageName + "_title", ArraySet())
-        val textData = prefs.getStringSet(packageName + "_text", ArraySet())
-        if (titleData.isEmpty() && textData.isEmpty()) return
+        val datas = prefs.getStringSet(packageName, ArraySet())
+        if (datas.isEmpty()) return
 
         NotificationManager::class.java.hook {
             injectMember {
@@ -50,8 +49,24 @@ class Hooker : YukiBaseHooker() {
                     val bundle = notify?.extras
                     val title = bundle?.get("android.title").toString()
                     val text = bundle?.get("android.text").toString()
-                    titleData.takeIf { e -> e.isNotEmpty() }?.forEach { if (title.contains(it)) resultNull() }
-                    textData.takeIf { e -> e.isNotEmpty() }?.forEach { if (text.contains(it)) resultNull() }
+                    datas.forEach {
+                        val sp = it.split("||")
+                        if (sp.size != 2) return@forEach
+                        val titleStr = sp[0]
+                        val textStr = sp[1]
+                        if (titleStr.isNotBlank() && textStr.isNotBlank()) {
+                            if (title.contains(titleStr) && text.contains(textStr)) resultNull()
+                            return@forEach
+                        }
+                        if (titleStr.isNotBlank()) {
+                            if (title.contains(titleStr)) resultNull()
+                            return@forEach
+                        }
+                        if (textStr.isNotBlank()) {
+                            if (text.contains(textStr)) resultNull()
+                            return@forEach
+                        }
+                    }
                 }
             }
         }

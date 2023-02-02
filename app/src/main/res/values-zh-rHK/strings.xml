@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="xposeddescription">利用关键词匹配对通知进行拦截\n开发者: 忆清鸣、luckyzyx</string>
+    <string name="configuration_scope">配置作用域</string>
+    <string name="app_list_title">作用域</string>
+    <string name="module_active_status">激活状态</string>
+    <string name="taichi_active_status">太极/无极</string>
+    <string name="module_ban_tips">开发者: 忆清鸣、luckyzyx\n未经开发者授权禁止私自搬运、转载</string>
+    <string name="ni_enable_intercept">启用拦截</string>
+    <string name="ni_add_notify">添加通知</string>
+    <string name="ni_data_tips_1">根据输入的字符与通知进行对比拦截, 当通知包含此关键词或句子时会进行拦截\n\n</string>
+    <string name="ni_data_tips_2">字符长度较短有可能会拦截掉其他通知, 务必输入正确的文字或语句\n\n</string>
+    <string name="ni_data_tips_3">注: 切换系统语言后必须重新设置拦截关键词, 否则可能会失效</string>
+    <string name="ni_title">标题</string>
+    <string name="ni_content">内容</string>
+    <string name="ni_edit_notify">编辑通知</string>
+    <string name="dialog_remove_tips">确定移除此条通知?</string>
+</resources>

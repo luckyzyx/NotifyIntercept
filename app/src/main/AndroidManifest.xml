@@ -38,7 +38,7 @@
             android:value="true" />
         <meta-data
             android:name="xposeddescription"
-            android:value="通知拦截\n开发者: 忆清鸣、luckyzyx" />
+            android:value="@string/xposeddescription" />
         <meta-data
             android:name="xposedminversion"
             android:value="93" />
