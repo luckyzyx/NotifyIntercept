@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
-import com.highcapable.yukihookapi.hook.factory.modulePrefs
+import com.highcapable.yukihookapi.hook.factory.prefs
 import com.luckyzyx.notifyintercept.R
 import com.luckyzyx.notifyintercept.databinding.LayoutNiItemBinding
 import java.io.Serializable
@@ -27,8 +27,10 @@ class AppConfigAdapter(
     RecyclerView.Adapter<AppConfigAdapter.ViewHolder>() {
 
     private var allDatas = ArrayList<NIInfo>()
+    private var hasPermissions = true
 
     init {
+        if (datas.size <= 1) hasPermissions = false
         allDatas = datas
     }
 
@@ -106,11 +108,12 @@ class AppConfigAdapter(
     }
 
     private fun saveAllData() {
+        if (!hasPermissions) return
         val datas = ArrayList<String>()
         allDatas.forEach {
             if (it.title.isNotBlank() || it.text.isNotBlank()) datas.add("${it.title}||${it.text}")
         }
-        context.modulePrefs.putStringSet(packName, datas.toSet())
+        context.prefs().edit { putStringSet(packName, datas.toSet()) }
         refreshDatas()
     }
 

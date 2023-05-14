@@ -19,7 +19,6 @@ class MainHook : IYukiHookXposedInit {
             elements(TAG, PRIORITY, PACKAGE_NAME, USER_ID)
         }
         isDebug = false
-        isEnableModulePrefsCache = false
     }
 
     override fun onHook() = encase {
@@ -28,7 +27,7 @@ class MainHook : IYukiHookXposedInit {
     }
 }
 
-@Suppress("UNUSED_VARIABLE", "DEPRECATION")
+@Suppress("DEPRECATION", "UNUSED_VARIABLE")
 class Hooker : YukiBaseHooker() {
     override fun onHook() {
         val enableList = prefs.getStringSet("enabledAppList", ArraySet())

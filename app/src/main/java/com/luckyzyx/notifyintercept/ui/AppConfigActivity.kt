@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
-import com.highcapable.yukihookapi.hook.factory.modulePrefs
+import com.highcapable.yukihookapi.hook.factory.prefs
 import com.luckyzyx.notifyintercept.R
 import com.luckyzyx.notifyintercept.databinding.ActivityAppConfigBinding
 import com.luckyzyx.notifyintercept.utlis.PackageUtils
@@ -42,7 +42,7 @@ class AppConfigActivity : AppCompatActivity() {
         val packInfo = PackageUtils(packageManager).getApplicationInfo(packName, 0)
         supportActionBar?.title = packInfo.loadLabel(packageManager)
 
-        val getEnabledList = modulePrefs.getStringSet("enabledAppList", ArraySet())
+        val getEnabledList = prefs().getStringSet("enabledAppList", ArraySet())
         if (getEnabledList.isNotEmpty()) {
             getEnabledList.forEach {
                 enabledList.add(it)
@@ -57,14 +57,12 @@ class AppConfigActivity : AppCompatActivity() {
                 if (enable) {
                     if (!enabledList.contains(packName)) enabledList.add(packName)
                 } else if (enabledList.contains(packName)) enabledList.remove(packName)
-                modulePrefs.putStringSet("enabledAppList", enabledList.toSet())
+                prefs().edit { putStringSet("enabledAppList", enabledList.toSet()) }
             }
         }
 
         binding.niSwipeRefreshLayout.apply {
-            setOnRefreshListener {
-                loadData()
-            }
+            setOnRefreshListener { loadData() }
         }
         if (allNIdatas.isEmpty()) loadData()
 
@@ -105,7 +103,7 @@ class AppConfigActivity : AppCompatActivity() {
     private fun loadData() {
         binding.niSwipeRefreshLayout.isRefreshing = true
         allNIdatas.clear()
-        val getData = modulePrefs.getStringSet(packName, ArraySet()).toTypedArray()
+        val getData = prefs().getStringSet(packName, ArraySet()).toTypedArray()
         getData.takeIf { e -> e.isNotEmpty() }?.forEach {
             val sp = it.split("||")
             if (sp.size == 2) {

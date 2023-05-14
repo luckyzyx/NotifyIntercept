@@ -13,7 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.highcapable.yukihookapi.hook.factory.modulePrefs
+import com.highcapable.yukihookapi.hook.factory.prefs
 import com.luckyzyx.notifyintercept.databinding.LayoutAppinfoItemBinding
 import java.io.Serializable
 
@@ -38,7 +38,7 @@ class AppListAdapter(private val context: Context, datas: ArrayList<AppInfo>) :
     }
 
     private fun sortDatas() {
-        val getEnabledList = context.modulePrefs.getStringSet("enabledAppList", ArraySet())
+        val getEnabledList = context.prefs().getStringSet("enabledAppList", ArraySet())
         if (getEnabledList.isNotEmpty()) {
             getEnabledList.forEach {
                 enabledList.add(it)
@@ -51,7 +51,7 @@ class AppListAdapter(private val context: Context, datas: ArrayList<AppInfo>) :
         sortData.forEach {
             enabledList.add(it.packName)
         }
-        context.modulePrefs.putStringSet("enabledAppList", enabledList.toSet())
+        context.prefs().edit { putStringSet("enabledAppList", enabledList.toSet()) }
         allDatas.apply {
             sortData.forEach {
                 this.remove(it)

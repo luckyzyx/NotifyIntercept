@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drake.net.utils.scopeLife
 import com.drake.net.utils.withIO
-import com.highcapable.yukihookapi.hook.factory.modulePrefs
+import com.highcapable.yukihookapi.hook.factory.prefs
 import com.luckyzyx.notifyintercept.R
 import com.luckyzyx.notifyintercept.databinding.ActivityAppListBinding
 import com.luckyzyx.notifyintercept.utlis.PackageUtils
@@ -35,7 +35,7 @@ class AppListActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        isShowSystemApp = modulePrefs.getBoolean("show_system_app", false)
+        isShowSystemApp = prefs().getBoolean("show_system_app", false)
         binding.appSearchViewLayout.apply {
             hint = "Name / PackageName"
             isHintEnabled = true
@@ -112,7 +112,7 @@ class AppListActivity : AppCompatActivity() {
         if (item.itemId == R.id.show_system_app) {
             item.isChecked = !item.isChecked
             isShowSystemApp = item.isChecked
-            modulePrefs.putBoolean("show_system_app", isShowSystemApp)
+            prefs().edit { putBoolean("show_system_app", isShowSystemApp) }
             loadData()
         }
         return super.onOptionsItemSelected(item)
