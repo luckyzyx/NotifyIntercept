@@ -27,10 +27,8 @@ class AppConfigAdapter(
     RecyclerView.Adapter<AppConfigAdapter.ViewHolder>() {
 
     private var allDatas = ArrayList<NIInfo>()
-    private var hasPermissions = true
 
     init {
-        if (datas.size <= 1) hasPermissions = false
         allDatas = datas
     }
 
@@ -108,7 +106,6 @@ class AppConfigAdapter(
     }
 
     private fun saveAllData() {
-        if (!hasPermissions) return
         val datas = ArrayList<String>()
         allDatas.forEach {
             if (it.title.isNotBlank() || it.text.isNotBlank()) datas.add("${it.title}||${it.text}")
