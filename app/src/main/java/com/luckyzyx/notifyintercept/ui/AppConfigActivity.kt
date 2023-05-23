@@ -53,10 +53,14 @@ class AppConfigActivity : AppCompatActivity() {
             text = getString(R.string.ni_enable_intercept)
             isChecked = enable
             setOnCheckedChangeListener { buttonView, isChecked ->
-                if (buttonView.isPressed) enable = isChecked
-                if (enable) {
+                if (!buttonView.isPressed) return@setOnCheckedChangeListener
+                if (isChecked) {
                     if (!enabledList.contains(packName)) enabledList.add(packName)
-                } else if (enabledList.contains(packName)) enabledList.remove(packName)
+                } else {
+                    if (enabledList.contains(packName)) enabledList.remove(packName)
+                    val datas = prefs().getStringSet(packName, ArraySet())
+                    if (datas.isEmpty()) prefs().edit { remove(packName) }
+                }
                 prefs().edit { putStringSet("enabledAppList", enabledList.toSet()) }
             }
         }

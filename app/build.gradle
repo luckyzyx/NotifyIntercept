@@ -10,11 +10,11 @@ android {
     def currentVersionCode = getVersionCode()
     defaultConfig {
         applicationId "com.luckyzyx.notifyintercept"
-        minSdk 29
+        minSdk 30
         //noinspection ExpiredTargetSdkVersion
         targetSdk 28
         versionCode currentVersionCode
-        versionName "1.2.1"
+        versionName "1.2.2"
     }
 
     buildTypes {

@@ -110,7 +110,8 @@ class AppConfigAdapter(
         allDatas.forEach {
             if (it.title.isNotBlank() || it.text.isNotBlank()) datas.add("${it.title}||${it.text}")
         }
-        context.prefs().edit { putStringSet(packName, datas.toSet()) }
+        if (datas.size > 0) context.prefs().edit { putStringSet(packName, datas.toSet()) }
+        else context.prefs().edit { remove(packName) }
         refreshDatas()
     }
 

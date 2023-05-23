@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.util.ArraySet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -23,7 +22,11 @@ data class AppInfo(
     var packName: String,
 ) : Serializable
 
-class AppListAdapter(private val context: Context, datas: ArrayList<AppInfo>) :
+class AppListAdapter(
+    private val context: Context,
+    datas: ArrayList<AppInfo>,
+    private val enableData: Set<String>?
+) :
     RecyclerView.Adapter<AppListAdapter.ViewHolder>() {
 
     private var allDatas = ArrayList<AppInfo>()
@@ -38,9 +41,8 @@ class AppListAdapter(private val context: Context, datas: ArrayList<AppInfo>) :
     }
 
     private fun sortDatas() {
-        val getEnabledList = context.prefs().getStringSet("enabledAppList", ArraySet())
-        if (getEnabledList.isNotEmpty()) {
-            getEnabledList.forEach {
+        if (!enableData.isNullOrEmpty()) {
+            enableData.forEach {
                 enabledList.add(it)
             }
         }
