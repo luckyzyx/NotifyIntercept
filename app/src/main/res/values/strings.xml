@@ -14,10 +14,14 @@
     <string name="ni_title">Title</string>
     <string name="ni_content">Content</string>
     <string name="ni_edit_notify">Edit Notify</string>
+    <string name="ni_add_data">Add Notify</string>
+
     <string name="dialog_remove_tips">Are you sure you want to remove this notification?</string>
     <string name="restart_scope_message">Are you sure you want to force stop these enabled apps?\nNote: The system framework scope needs to be restarted to take effect.\nThis operation requires Root permission</string>
     <string name="data_import">Data Import</string>
     <string name="data_export">Data Export</string>
     <string name="data_import_and_export">Import and Export</string>
+    <string name="data_edit">Edit</string>
+    <string name="data_remove">Remove</string>
 
 </resources>

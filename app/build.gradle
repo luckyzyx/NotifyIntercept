@@ -14,7 +14,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdk 28
         versionCode currentVersionCode
-        versionName "1.2.2"
+        versionName "1.2.3"
     }
 
     buildTypes {
@@ -36,8 +36,9 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
     }
     applicationVariants.all { variant ->
         variant.outputs.all {

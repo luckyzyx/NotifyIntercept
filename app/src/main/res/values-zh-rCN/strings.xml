@@ -14,9 +14,12 @@
     <string name="ni_title">标题</string>
     <string name="ni_content">内容</string>
     <string name="ni_edit_notify">编辑通知</string>
+    <string name="ni_add_data">添加通知</string>
     <string name="dialog_remove_tips">确定移除此条通知?</string>
     <string name="restart_scope_message">确定要强制停止这些已启用APP？\n注：系统框架作用域需要重启才能生效。\n此操作需要Root权限</string>
     <string name="data_import">数据导入</string>
     <string name="data_export">数据导出</string>
     <string name="data_import_and_export">导入/导出</string>
+    <string name="data_edit">编辑</string>
+    <string name="data_remove">移除</string>
 </resources>
