@@ -5,7 +5,7 @@
     <group android:checkableBehavior="all">
         <item
             android:id="@+id/show_system_app"
-            android:title="显示系统APP"
+            android:title="@string/data_show_system_apps"
             app:showAsAction="never"
             tools:ignore="HardcodedText" />
     </group>
