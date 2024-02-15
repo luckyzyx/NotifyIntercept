@@ -1,3 +1,5 @@
+keystore/
+
 # Built application files
 *.apk
 *.aar
@@ -20,7 +22,9 @@ out/
 # Gradle files
 .gradle/
 build/
+keystore
 crowdin.properties
+crowdin.yml
 
 # Local configuration file (sdk path, etc)
 local.properties
