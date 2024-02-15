@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import com.highcapable.yukihookapi.YukiHookAPI
+import com.highcapable.yukihookapi.YukiHookAPI.VERSION
 import com.luckyzyx.notifyintercept.R
 import com.luckyzyx.notifyintercept.databinding.ActivityMainBinding
 
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 Xposed: $xposedActive
                 ${getString(R.string.taichi_active_status)}: $taichiActive
                 ${getString(R.string.module_active_status)}: $moduleActive
-                YukiAPI: ${YukiHookAPI.API_VERSION_NAME}[${YukiHookAPI.API_VERSION_CODE}]
+                YukiAPI: $VERSION
             """.trimIndent()
             gravity = Gravity.CENTER
         }

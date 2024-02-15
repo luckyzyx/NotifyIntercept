@@ -7,6 +7,7 @@ import com.highcapable.yukihookapi.annotation.xposed.InjectYukiHookWithXposed
 import com.highcapable.yukihookapi.hook.entity.YukiBaseHooker
 import com.highcapable.yukihookapi.hook.factory.configs
 import com.highcapable.yukihookapi.hook.factory.encase
+import com.highcapable.yukihookapi.hook.factory.method
 import com.highcapable.yukihookapi.hook.xposed.proxy.IYukiHookXposedInit
 
 @InjectYukiHookWithXposed(isUsingResourcesHook = false)
@@ -35,13 +36,12 @@ class Hooker : YukiBaseHooker() {
         val datas = prefs.getStringSet(packageName, ArraySet())
         if (datas.isEmpty()) return
 
-        NotificationManager::class.java.hook {
-            injectMember {
-                method {
-                    name = "notify"
-                    paramCount = 3
-                }
-                beforeHook {
+        NotificationManager::class.java.apply {
+            method {
+                name = "notify"
+                paramCount = 3
+            }.hook {
+                before {
                     val tag = args(0).string()
                     val id = args(1).int()
                     val notify = args(2).cast<Notification>()
