@@ -26,5 +26,10 @@
     <string name="data_show_system_apps">Show system apps</string>
     <string name="data_edit">Edit</string>
     <string name="data_remove">Remove</string>
+    <string name="no_root">No Root permission</string>
+    <string name="clear_unused_rules">Do you want to clean up unenabled rules??</string>
+    <string name="notify_title">Notification title</string>
+    <string name="notify_content">Notification content (optional, text only)</string>
+    <string name="save">Save</string>
 
 </resources>

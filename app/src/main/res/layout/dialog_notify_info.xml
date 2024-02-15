@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingHorizontal="10dp">
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="8dp">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/data_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/ni_dialog_title"
-        tools:ignore="HardcodedText">
+        android:hint="@string/notify_title"
+        app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/data_title"
@@ -25,11 +27,11 @@
         android:id="@+id/data_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/ni_dialog_content"
-        tools:ignore="HardcodedText">
+        android:hint="@string/notify_content"
+        app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/data_text"
+            android:id="@+id/data_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp" />
@@ -40,8 +42,7 @@
         android:id="@+id/data_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="@string/ni_dialog_save"
-        tools:ignore="HardcodedText" />
+        android:layout_marginVertical="8dp"
+        android:text="@string/save" />
 
 </LinearLayout>

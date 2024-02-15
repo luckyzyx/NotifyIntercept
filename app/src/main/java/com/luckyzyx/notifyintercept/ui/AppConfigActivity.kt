@@ -2,93 +2,108 @@ package com.luckyzyx.notifyintercept.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.ArraySet
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.button.MaterialButton
+import com.drake.net.utils.scopeLife
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
 import com.highcapable.yukihookapi.hook.factory.prefs
 import com.luckyzyx.notifyintercept.R
 import com.luckyzyx.notifyintercept.databinding.ActivityAppConfigBinding
+import com.luckyzyx.notifyintercept.databinding.DialogNotifyInfoBinding
+import com.luckyzyx.notifyintercept.utlis.NotifyInfo
 import com.luckyzyx.notifyintercept.utlis.PackageUtils
+import com.luckyzyx.notifyintercept.utlis.safeOfNull
+import com.luckyzyx.notifyintercept.utlis.updateAppData
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 
 class AppConfigActivity : AppCompatActivity() {
+    private val tags = "AppConfigActivity"
 
     private lateinit var binding: ActivityAppConfigBinding
+
     private var packName: String = ""
-    private var enable: Boolean = false
-    private var enabledList = ArrayList<String>()
+    private var enabled: Boolean = false
+    private var allNotifyDatas = ArrayList<NotifyInfo>()
 
     private var appConfigAdapter: AppConfigAdapter? = null
-    private var allNIdatas = ArrayList<NIInfo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAppConfigBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         initConfig()
     }
 
     @SuppressLint("SetTextI18n")
     private fun initConfig() {
-        val intentPackName = intent?.getStringExtra("packName")
-        if (intent == null || intentPackName == null || intentPackName == "") {
-            finish()
-        } else packName = intentPackName
-        val packInfo = PackageUtils(packageManager).getApplicationInfo(packName, 0)
-        supportActionBar?.title = packInfo.loadLabel(packageManager)
+        allNotifyDatas.clear()
+        if (intent == null) finish()
 
-        val getEnabledList = prefs().getStringSet("enabledAppList", ArraySet())
-        if (getEnabledList.isNotEmpty()) {
-            getEnabledList.forEach {
-                enabledList.add(it)
+        val scopeJson = prefs().getString("scopesData", JSONObject().toString())
+        val scopesData = safeOfNull { JSONObject(scopeJson) } ?: JSONObject()
+//        LogUtils.d(tags, "initConfig", "${scopesData.toString()}", true)
+
+        packName = intent.getStringExtra("packName") ?: ""
+        if (packName.isBlank()) finish()
+//        LogUtils.d(tags, "initConfig", "${packName.toString()}", true)
+
+        enabled = intent.getBooleanExtra("isEnable", false)
+//        LogUtils.d(tags, "initConfig", "${enabled.toString()}", true)
+
+        val jsonArr = intent.getStringExtra("datas") ?: JSONArray().toString()
+//        LogUtils.d(tags, "initConfig", "${jsonArr.toString()}", true)
+
+        val notifyDatas = safeOfNull { JSONArray(jsonArr) } ?: JSONArray()
+        for (i in 0 until notifyDatas.length()) {
+            val ni = notifyDatas.optJSONObject(i)
+            if (ni != null) {
+                val title = ni.optString("title")
+                val content = ni.optString("content")
+                allNotifyDatas.add(NotifyInfo(title, content))
             }
-            enable = enabledList.contains(packName)
         }
+
+        val appinfo = PackageUtils(packageManager).getApplicationInfo(packName, 0)
+        supportActionBar?.title = appinfo?.loadLabel(packageManager)
+
         binding.niEnable.apply {
             text = getString(R.string.ni_enable_intercept)
-            isChecked = enable
+            isChecked = enabled
             setOnCheckedChangeListener { buttonView, isChecked ->
                 if (!buttonView.isPressed) return@setOnCheckedChangeListener
-                if (isChecked) {
-                    if (!enabledList.contains(packName)) enabledList.add(packName)
-                } else {
-                    if (enabledList.contains(packName)) enabledList.remove(packName)
-                    val datas = prefs().getStringSet(packName, ArraySet())
-                    if (datas.isEmpty()) prefs().edit { remove(packName) }
-                }
-                prefs().edit { putStringSet("enabledAppList", enabledList.toSet()) }
+                enabled = isChecked
+                updateAppData(scopesData, packName, isChecked, allNotifyDatas)
             }
         }
 
         binding.niSwipeRefreshLayout.apply {
             setOnRefreshListener { loadData() }
         }
-        if (allNIdatas.isEmpty()) loadData()
 
         binding.niAddData.apply {
             setOnClickListener {
+                val dialogBinding = DialogNotifyInfoBinding.inflate(layoutInflater)
                 val addDialog = MaterialAlertDialogBuilder(
                     context,
                     com.google.android.material.R.style.MaterialAlertDialog_Material3_Title_Text_CenterStacked
                 ).apply {
                     setTitle(getString(R.string.ni_add_notify))
-                    setView(R.layout.layout_ni_dialog)
+                    setView(dialogBinding.root)
                 }.show()
-                val titleView = addDialog.findViewById<TextInputEditText>(R.id.data_title)
-                val textView = addDialog.findViewById<TextInputEditText>(R.id.data_text)
-                addDialog.findViewById<MaterialButton>(R.id.data_save)?.apply {
+                val titleView = dialogBinding.dataTitle
+                val contentView = dialogBinding.dataContent
+
+                dialogBinding.dataSave.apply {
                     setOnClickListener {
-                        val titleStr = titleView?.text.toString()
-                        val textStr = textView?.text.toString()
+                        val titleStr = titleView.text.toString()
+                        val textStr = contentView.text.toString()
                         if (titleStr.isNotBlank() || textStr.isNotBlank()) {
-                            appConfigAdapter?.addData(
-                                NIInfo(titleStr, textStr)
-                            )
+                            appConfigAdapter?.addData(NotifyInfo(titleStr, textStr))
                             addDialog.dismiss()
                         }
                     }
@@ -97,35 +112,32 @@ class AppConfigActivity : AppCompatActivity() {
         }
 
         binding.niTip.apply {
-            text =
-                getString(R.string.ni_data_tips_1) + getString(R.string.ni_data_tips_2) + getString(
-                    R.string.ni_data_tips_3
-                )
+            text = getString(R.string.ni_data_tips_1) +
+                    getString(R.string.ni_data_tips_2) +
+                    getString(R.string.ni_data_tips_3)
         }
+
+        loadData()
     }
 
     private fun loadData() {
-        binding.niSwipeRefreshLayout.isRefreshing = true
-        allNIdatas.clear()
-        val getData = prefs().getStringSet(packName, ArraySet()).toTypedArray()
-        getData.takeIf { e -> e.isNotEmpty() }?.forEach {
-            val sp = it.split("||")
-            if (sp.size == 2) {
-                val title = sp[0]
-                val text = sp[1]
-                allNIdatas.add(NIInfo(title, text))
+        scopeLife {
+            binding.niSwipeRefreshLayout.isRefreshing = true
+            binding.niRecyclerView.apply {
+                appConfigAdapter = AppConfigAdapter(
+                    context, packName, enabled, allNotifyDatas
+                )
+                adapter = appConfigAdapter
+                layoutManager = LinearLayoutManager(context)
             }
+            binding.niSwipeRefreshLayout.isRefreshing = false
         }
-        appConfigAdapter = AppConfigAdapter(this@AppConfigActivity, packName, allNIdatas)
-        binding.niRecyclerView.apply {
-            adapter = appConfigAdapter
-            layoutManager = LinearLayoutManager(this@AppConfigActivity)
-        }
-        binding.niSwipeRefreshLayout.isRefreshing = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) finish()
+        when (item.itemId) {
+            android.R.id.home -> finish()
+        }
         return super.onOptionsItemSelected(item)
     }
 }

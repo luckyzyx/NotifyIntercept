@@ -9,12 +9,16 @@ import com.highcapable.yukihookapi.hook.factory.configs
 import com.highcapable.yukihookapi.hook.factory.encase
 import com.highcapable.yukihookapi.hook.factory.method
 import com.highcapable.yukihookapi.hook.xposed.proxy.IYukiHookXposedInit
+import com.luckyzyx.notifyintercept.utlis.NotifyInfo
+import com.luckyzyx.notifyintercept.utlis.safeOfNull
+import org.json.JSONArray
+import org.json.JSONObject
 
 @InjectYukiHookWithXposed(isUsingResourcesHook = false)
 class MainHook : IYukiHookXposedInit {
     override fun onInit() = configs {
         debugLog {
-            tag = "NI"
+            tag = "NotifyIntercept"
             isEnable = true
             isRecord = true
             elements(TAG, PRIORITY, PACKAGE_NAME, USER_ID)
@@ -33,14 +37,34 @@ class Hooker : YukiBaseHooker() {
     override fun onHook() {
         val enableList = prefs.getStringSet("enabledAppList", ArraySet())
         if (!enableList.contains(packageName)) return
-        val datas = prefs.getStringSet(packageName, ArraySet())
-        if (datas.isEmpty()) return
+
+        val allNotifyDatas = ArrayList<NotifyInfo>()
+        val scopesJson = prefs.getString("scopesData", JSONObject().toString())
+        val scopesData = safeOfNull { JSONObject(scopesJson) } ?: JSONObject()
+        val scopes = scopesData.optJSONArray("scopes")
+        if (scopes != null) {
+            var index: Int = -1
+            for (i in 0 until scopes.length()) {
+                val pack = scopes.optJSONObject(i)
+                val packName = pack.optString("package")
+                if (packName == packageName) index = i
+            }
+            if (index >= 0) {
+                val pack = scopes.optJSONObject(index)
+                val datas = pack.optJSONArray("datas") ?: JSONArray()
+                for (i in 0 until datas.length()) {
+                    val ni = datas.optJSONObject(i)
+                    if (ni != null) {
+                        val title = ni.optString("title")
+                        val content = ni.optString("content")
+                        allNotifyDatas.add(NotifyInfo(title, content))
+                    }
+                }
+            }
+        }
 
         NotificationManager::class.java.apply {
-            method {
-                name = "notify"
-                paramCount = 3
-            }.hook {
+            method { name = "notify";paramCount = 3 }.hook {
                 before {
                     val tag = args(0).string()
                     val id = args(1).int()
@@ -48,21 +72,17 @@ class Hooker : YukiBaseHooker() {
                     val bundle = notify?.extras
                     val title = bundle?.get("android.title").toString()
                     val text = bundle?.get("android.text").toString()
-                    datas.forEach {
-                        val sp = it.split("||")
-                        if (sp.size != 2) return@forEach
-                        val titleStr = sp[0]
-                        val textStr = sp[1]
-                        if (titleStr.isNotBlank() && textStr.isNotBlank()) {
-                            if (title.contains(titleStr) && text.contains(textStr)) resultNull()
+                    allNotifyDatas.forEach {
+                        if (it.title.isNotBlank() && it.content.isNotBlank()) {
+                            if (title.contains(it.title) && text.contains(it.content)) resultNull()
                             return@forEach
                         }
-                        if (titleStr.isNotBlank()) {
-                            if (title.contains(titleStr)) resultNull()
+                        if (it.title.isNotBlank()) {
+                            if (title.contains(it.title)) resultNull()
                             return@forEach
                         }
-                        if (textStr.isNotBlank()) {
-                            if (text.contains(textStr)) resultNull()
+                        if (it.content.isNotBlank()) {
+                            if (text.contains(it.content)) resultNull()
                             return@forEach
                         }
                     }

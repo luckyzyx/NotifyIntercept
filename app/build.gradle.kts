@@ -25,14 +25,14 @@ android {
         }
     }
     namespace = "com.luckyzyx.notifyintercept"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.luckyzyx.notifyintercept"
         minSdk = 30
         //noinspection ExpiredTargetSdkVersion
         targetSdk = 28
         versionCode = getVersionCode()
-        versionName = "1.2.4"
+        versionName = "1.3.0"
     }
 
     buildTypes {
@@ -84,16 +84,43 @@ dependencies {
     compileOnly("de.robv.android.xposed:api:82")
     implementation("com.highcapable.yukihookapi:api:1.2.0")
     ksp("com.highcapable.yukihookapi:ksp-xposed:1.2.0")
+
+    // 权限请求框架
+    implementation("com.github.getActivity:XXPermissions:18.5")
+    //崩溃日志显示
     implementation("com.github.simplepeng.SpiderMan:spiderman:v1.1.9")
+
+    //kotlin协程
+    val kotlinxCoroutinesVersion = "1.7.3"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxCoroutinesVersion}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinxCoroutinesVersion}")
+
+    //Net OkHttp相关
     //noinspection GradleDependency
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.github.liangjingkanji:Net:3.6.4")
 
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    //libsu
+    val libsuVersion = "5.2.2"
+    implementation("com.github.topjohnwu.libsu:core:${libsuVersion}")
+    implementation("com.github.topjohnwu.libsu:service:${libsuVersion}")
+//    implementation("com.github.topjohnwu.libsu:nio:${libsuVersion}")
+
+    //MarkDown
+    val markwonVersion = "4.6.2"
+    implementation("io.noties.markwon:core:$markwonVersion")
+    implementation("io.noties.markwon:html:$markwonVersion")
+    implementation("io.noties.markwon:image:$markwonVersion")
+    implementation("io.noties.markwon:ext-tables:$markwonVersion")
+
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    //Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
 }
 
 fun getVersionCode(): Int {

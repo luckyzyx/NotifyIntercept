@@ -26,4 +26,9 @@
     <string name="data_show_system_apps">显示系统APP</string>
     <string name="data_edit">编辑</string>
     <string name="data_remove">移除</string>
+    <string name="no_root">无 Root 权限</string>
+    <string name="clear_unused_rules">是否清理未启用的规则？</string>
+    <string name="notify_title">通知标题</string>
+    <string name="notify_content">通知内容(可选，仅文本)</string>
+    <string name="save">保存</string>
 </resources>

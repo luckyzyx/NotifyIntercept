@@ -45,9 +45,5 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(context, AppListActivity::class.java))
             }
         }
-
-//        val intent = Intent(this@MainActivity, AppConfigActivity::class.java)
-//        intent.putExtra("packName","com.czy0729.bangumi")
-//        startActivity(intent)
     }
 }
